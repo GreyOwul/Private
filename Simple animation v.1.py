@@ -16,22 +16,22 @@ height=720
 Period = 2 #(seconds)
 FPS = 30 #Frames per Second
 
-light_x=8
+light_x=8 #Light's position in space.
 light_y=4.5
 light_z=9
-brightness=100000
-min_Intensity=11
+brightness=100000 #scalar multiplier which is roughly analogous to how many watts the light is rated at.
+min_Intensity=11 #describes the minimum brightness a pixel on the spehere will be coloured (min_Intensity,min_Intensity,min_Intensity)
 light = (light_x,light_y,light_z,brightness)
 
 d_pix_proj=9
 
-r=13
+r=13  #sphere radius and position in space
 a=17
 b=0
 c=27
 
 
-def Distance_From_Sphere_Surface(x,y,z,a,b,c,r):    
+def Distance_From_Sphere_Surface(x,y,z,a,b,c,r): #Takes position in space (x,y,z) and returns the distance of that point to the surafce of a sphere cenred at (a,b,c) of radius (r)
     distance=abs(((x-a)**2+(y-b)**2+(z-c)**2)**(1/2)-r)
     return distance
 
@@ -57,18 +57,18 @@ def Light_Intensity(light,min_Intensity,x,y,z,a,b,c): #Given a pixel corresponds
         return (Intensity,Intensity,Intensity)
 
 
-for frame in range(0, (FPS*Period), 1):
-    a=math.cos(frame*2*math.pi/(FPS*Period))*17
+for frame in range(0, (FPS*Period/2), 1):
+    a=math.cos(frame*2*math.pi/(FPS*Period))*17   #This describes the movement of the sphere in the x direction 
     Image_Array = numpy.full((height,width,3),0)
     
     for v_pix in range(1,(height+1)*2,2):
         for h_pix in range (1,(width+1)*2,2):    
-            h_pix_proj=(-8)+h_pix*(width*2)
-            v_pix_proj=(-4.5)+v_pix*(height*2)
+            h_pix_proj=((-8)+h_pix*(width*2))/1000
+            v_pix_proj=((-4.5)+v_pix*(height*2))/1000
             
-            for t in range(int(13.975*1000),int(40.15*1000),int(0.05*1000)):      
-                x=h_pix_proj*(t/(d_pix_proj*1000))
-                y=v_pix_proj*(t/(d_pix_proj*1000))
+            for t in range(13950,40150,50):      
+                x=h_pix_proj*(t/(d_pix_proj))
+                y=v_pix_proj*(t/(d_pix_proj))
                 z=t/1000
                 
                 if Distance_From_Sphere_Surface(x,y,z,a,b,c,r) <= 0.025:
